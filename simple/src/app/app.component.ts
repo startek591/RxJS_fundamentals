@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { of, Subscription, from } from 'rxjs';
+import { of, Subscription, from, fromEvent } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +16,8 @@ export class AppComponent implements OnInit, OnDestroy {
   subArray!: Subscription;
   subFrom!: Subscription;
   subStrings!: Subscription;
+  subEvent!: Subscription;
+  subKey!: Subscription;
 
   ngOnInit(): void {
     this.sub = of(2, 4, 6, 8).subscribe((item) =>
@@ -34,11 +36,21 @@ export class AppComponent implements OnInit, OnDestroy {
       error: (error) => console.log('Error occurred:', error),
       complete: () => console.log('No more apples, go home'),
     });
+    this.subEvent = fromEvent(document, 'click').subscribe({
+      next: (ev) => console.log('Click event:', ev.target),
+      error: (err) => console.log('Error occurred:', err),
+      complete: () => console.log('No more clicks'),
+    });
+    this.subKey = fromEvent(document, 'keydown').subscribe((ev) =>
+      console.log('Key event:', (ev as KeyboardEvent).key)
+    );
   }
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
     this.subArray.unsubscribe();
     this.subFrom.unsubscribe();
+    this.subEvent.unsubscribe();
+    this.subKey.unsubscribe();
   }
 }
