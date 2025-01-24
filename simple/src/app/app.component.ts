@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { of, Subscription, from, fromEvent, map, tap } from 'rxjs';
+import { of, Subscription, from, fromEvent, map, tap, filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
   sub2!: Subscription;
   subApples2!: Subscription;
   sub3!: Subscription;
+  subFilter!: Subscription;
 
   ngOnInit(): void {
     // Observable examples
@@ -86,6 +87,13 @@ export class AppComponent implements OnInit, OnDestroy {
       .pipe(
         map((item) => item * 2),
         tap((item) => console.log('Map x2:', item))
+      )
+      .subscribe();
+
+    this.subFilter = of(2, 3, 4, 5, 6)
+      .pipe(
+        filter((x: number) => x % 2 === 0),
+        tap((x) => console.log('Even:', x))
       )
       .subscribe();
   }
