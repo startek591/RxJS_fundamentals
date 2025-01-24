@@ -15,6 +15,7 @@ export class AppComponent implements OnInit, OnDestroy {
   sub!: Subscription;
   subArray!: Subscription;
   subFrom!: Subscription;
+  subStrings!: Subscription;
 
   ngOnInit(): void {
     this.sub = of(2, 4, 6, 8).subscribe((item) =>
@@ -27,6 +28,11 @@ export class AppComponent implements OnInit, OnDestroy {
       next: (item) => console.log('Form item:', item),
       error: (error) => console.log('From error:', error),
       complete: () => console.log('From complete'),
+    });
+    this.subStrings = of('Apple1', 'Apple2', 'Apple3').subscribe({
+      next: (apple) => console.log('Apple emitted:', apple),
+      error: (error) => console.log('Error occurred:', error),
+      complete: () => console.log('No more apples, go home'),
     });
   }
 
