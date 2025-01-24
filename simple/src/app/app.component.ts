@@ -1,6 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { of, Subscription, from, fromEvent, map, tap, filter } from 'rxjs';
+import {
+  of,
+  Subscription,
+  from,
+  fromEvent,
+  map,
+  tap,
+  filter,
+  timer,
+  take,
+} from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -26,6 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
   subApples2!: Subscription;
   sub3!: Subscription;
   subFilter!: Subscription;
+  subTimer!: Subscription;
 
   ngOnInit(): void {
     // Observable examples
@@ -96,6 +107,14 @@ export class AppComponent implements OnInit, OnDestroy {
         tap((x) => console.log('Even:', x))
       )
       .subscribe();
+
+    this.subTimer = timer(0, 1000)
+      .pipe(take(5))
+      .subscribe({
+        next: (item) => console.log('Timer:', item),
+        error: (error) => console.log('Timer error occurred:', error),
+        complete: () => console.log('No more ticks'),
+      });
   }
 
   ngOnDestroy(): void {
@@ -108,5 +127,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
     // RxJS operators examples
     this.subApples.unsubscribe();
+    this.subApples2.unsubscribe();
+    this.sub2.unsubscribe();
+    this.subApples2.unsubscribe();
+    this.sub3.unsubscribe();
+    this.subFilter.unsubscribe();
+    this.subTimer.unsubscribe();
   }
 }
