@@ -12,6 +12,7 @@ import { of, Subscription, from, fromEvent } from 'rxjs';
 export class AppComponent implements OnInit, OnDestroy {
   name = 'Angular';
 
+  // Obseravbles examples
   sub!: Subscription;
   subArray!: Subscription;
   subFrom!: Subscription;
@@ -20,6 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
   subKey!: Subscription;
 
   ngOnInit(): void {
+    // Observable examples
     this.sub = of(2, 4, 6, 8).subscribe((item) =>
       console.log('Value from of:', item)
     );
@@ -49,6 +51,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // Obserables examples
     this.sub.unsubscribe();
     this.subArray.unsubscribe();
     this.subFrom.unsubscribe();
