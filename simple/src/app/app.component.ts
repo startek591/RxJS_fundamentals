@@ -41,9 +41,11 @@ export class AppComponent implements OnInit, OnDestroy {
       error: (err) => console.log('Error occurred:', err),
       complete: () => console.log('No more clicks'),
     });
-    this.subKey = fromEvent(document, 'keydown').subscribe((ev) =>
-      console.log('Key event:', (ev as KeyboardEvent).key)
-    );
+    const keys: string[] = [];
+    this.subKey = fromEvent(document, 'keydown').subscribe((ev) => {
+      keys.push((ev as KeyboardEvent).key);
+      console.log('Key array:', keys);
+    });
   }
 
   ngOnDestroy(): void {
