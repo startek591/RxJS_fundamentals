@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { of, Subscription, from, fromEvent } from 'rxjs';
+import { of, Subscription, from, fromEvent, map } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +19,10 @@ export class AppComponent implements OnInit, OnDestroy {
   subStrings!: Subscription;
   subEvent!: Subscription;
   subKey!: Subscription;
+
+  // RxJS operators examples
+  subApples!: Subscription;
+  sub2!: Subscription;
 
   ngOnInit(): void {
     // Observable examples
@@ -48,6 +52,21 @@ export class AppComponent implements OnInit, OnDestroy {
       keys.push((ev as KeyboardEvent).key);
       console.log('Key array:', keys);
     });
+
+    // RxJS operators examples
+    const apples2$ = from([
+      { id: 1, type: 'macintosh' },
+      { id: 2, type: 'gala' },
+      { id: 3, type: 'fuji' },
+    ]);
+
+    this.subApples = apples2$
+      .pipe(map((a) => ({ ...a, color: 'red' })))
+      .subscribe((x) => console.log('Apple type:', x));
+
+    this.sub2 = of(2, 4, 6)
+      .pipe(map((item) => item * 2))
+      .subscribe((item) => console.log('Map x2:', item));
   }
 
   ngOnDestroy(): void {
@@ -57,5 +76,8 @@ export class AppComponent implements OnInit, OnDestroy {
     this.subFrom.unsubscribe();
     this.subEvent.unsubscribe();
     this.subKey.unsubscribe();
+
+    // RxJS operators examples
+    this.subApples.unsubscribe();
   }
 }
