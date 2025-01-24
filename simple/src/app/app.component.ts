@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { of, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,15 @@ import { CommonModule } from '@angular/common';
 export class AppComponent implements OnInit, OnDestroy {
   name = 'Angular';
 
-  ngOnInit(): void {}
+  sub!: Subscription;
 
-  ngOnDestroy(): void {}
+  ngOnInit(): void {
+    this.sub = of(2, 4, 6, 8).subscribe((item) =>
+      console.log('Value from of:', item)
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
+  }
 }
