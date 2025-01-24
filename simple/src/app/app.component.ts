@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { of, Subscription, from, fromEvent, map } from 'rxjs';
+import { of, Subscription, from, fromEvent, map, tap } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +23,8 @@ export class AppComponent implements OnInit, OnDestroy {
   // RxJS operators examples
   subApples!: Subscription;
   sub2!: Subscription;
+  subApples2!: Subscription;
+  sub3!: Subscription;
 
   ngOnInit(): void {
     // Observable examples
@@ -59,6 +61,11 @@ export class AppComponent implements OnInit, OnDestroy {
       { id: 2, type: 'gala' },
       { id: 3, type: 'fuji' },
     ]);
+    const apples3$ = from([
+      { id: 1, type: 'macintosh' },
+      { id: 2, type: 'gala' },
+      { id: 3, type: 'fuji' },
+    ]);
 
     this.subApples = apples2$
       .pipe(map((a) => ({ ...a, color: 'red' })))
@@ -67,6 +74,20 @@ export class AppComponent implements OnInit, OnDestroy {
     this.sub2 = of(2, 4, 6)
       .pipe(map((item) => item * 2))
       .subscribe((item) => console.log('Map x2:', item));
+
+    this.subApples2 = apples3$
+      .pipe(
+        map((a) => ({ ...a, color: 'red' })),
+        tap((a) => console.log('Apple:', a))
+      )
+      .subscribe();
+
+    this.sub3 = of(2, 4, 6)
+      .pipe(
+        map((item) => item * 2),
+        tap((item) => console.log('Map x2:', item))
+      )
+      .subscribe();
   }
 
   ngOnDestroy(): void {
