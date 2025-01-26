@@ -1,3 +1,5 @@
+import { Review } from '../reviews/review';
+
 export interface Product {
   id: number;
   productName: string;
@@ -6,5 +8,5 @@ export interface Product {
   price: number;
   quantityInStock?: number;
   hasReviews?: boolean;
-  reviews?: any[];
+  reviews?: Review[];
 }
