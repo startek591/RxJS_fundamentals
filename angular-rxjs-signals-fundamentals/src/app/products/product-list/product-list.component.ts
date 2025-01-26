@@ -3,12 +3,13 @@ import { Product } from '../product';
 import { NgIf, NgFor, NgClass } from '@angular/common';
 import { ProductService } from '../product.service';
 import { Subscription, tap } from 'rxjs';
+import { ProductDetailComponent } from '../product-detail/product-detail.component';
 
 @Component({
   selector: 'pm-product-list',
   templateUrl: './product-list.component.html',
   standalone: true,
-  imports: [NgIf, NgFor, NgClass],
+  imports: [NgIf, NgFor, NgClass, ProductDetailComponent],
 })
 export class ProductListComponent implements OnInit, OnDestroy {
   pageTitle = 'Products';
