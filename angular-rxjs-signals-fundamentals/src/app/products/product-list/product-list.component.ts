@@ -37,6 +37,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   onSelected(productId: number): void {
-    this.selectedProductId = productId;
+    this.productService.productSelected(productId);
   }
 }

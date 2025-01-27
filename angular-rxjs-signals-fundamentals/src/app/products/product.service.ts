@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { Product } from './product';
 import { ReviewService } from '../reviews/review.service';
@@ -12,6 +12,11 @@ import { Review } from '../reviews/review';
 export class ProductService {
   private productsUrl = 'api/products';
   private reviewService = inject(ReviewService);
+
+  private productSelectedSubject = new BehaviorSubject<number | undefined>(
+    undefined
+  );
+  readonly productSelected$ = this.productSelectedSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -29,6 +34,10 @@ export class ProductService {
       tap((x) => console.log(x)),
       catchError(this.handleError)
     );
+  }
+
+  productSelected(selectedProductId: number): void {
+    this.productSelectedSubject.next(selectedProductId);
   }
 
   private getProductWithReviews(product: Product): Observable<Product> {
