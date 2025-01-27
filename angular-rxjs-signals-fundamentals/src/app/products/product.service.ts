@@ -1,14 +1,17 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { Product } from './product';
+import { ReviewService } from '../reviews/review.service';
+import { Review } from '../reviews/review';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
   private productsUrl = 'api/products';
+  private reviewService = inject(ReviewService);
 
   constructor(private http: HttpClient) {}
 
@@ -22,9 +25,20 @@ export class ProductService {
   getProduct(id: number): Observable<Product> {
     const productUrl = this.productsUrl + '/' + id;
     return this.http.get<Product>(productUrl).pipe(
-      tap(() => console.log('In http.get by id pipeline')),
+      switchMap((product) => this.getProductWithReviews(product)),
+      tap((x) => console.log(x)),
       catchError(this.handleError)
     );
+  }
+
+  private getProductWithReviews(product: Product): Observable<Product> {
+    if (product.hasReviews) {
+      return this.http
+        .get<Review[]>(this.reviewService.getReviewUrl(product.id))
+        .pipe(map((reviews) => ({ ...product, reviews } as Product)));
+    } else {
+      return of(product);
+    }
   }
 
   private handleError(err: HttpErrorResponse) {
