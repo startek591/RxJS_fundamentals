@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, filter, map, switchMap, tap } from 'rxjs/operators';
 import { Product } from './product';
 import { ReviewService } from '../reviews/review.service';
 import { Review } from '../reviews/review';
@@ -26,6 +26,17 @@ export class ProductService {
       catchError(this.handleError)
     );
   }
+
+  readonly product$ = this.productSelected$.pipe(
+    filter(Boolean),
+    switchMap((id) => {
+      const productUrl = this.productsUrl + '/' + id;
+      return this.http.get<Product>(productUrl).pipe(
+        switchMap((product) => this.getProductWithReviews(product)),
+        catchError((error) => this.handleError(error))
+      );
+    })
+  );
 
   getProduct(id: number): Observable<Product> {
     const productUrl = this.productsUrl + '/' + id;
